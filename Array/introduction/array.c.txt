@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the array structure
+typedef struct {
+    void *data;
+    size_t element_size;
+    size_t length;
+} Array;
+
+// Function to initialize the array
+Array array_init(size_t element_size, size_t length) {
+    Array arr;
+    arr.element_size = element_size;
+    arr.length = length;
+    arr.data = malloc(element_size * length);
+    if (!arr.data) {
+        perror("Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+    return arr;
+}
+
+// Function to set value at index
+void array_set(Array *arr, size_t index, void *value) {
+    if (index >= arr->length) {
+        fprintf(stderr, "Index out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+    memcpy((char *)arr->data + index * arr->element_size, value, arr->element_size);
+}
+
+// Function to get value at index
+void array_get(Array *arr, size_t index, void *out_value) {
+    if (index >= arr->length) {
+        fprintf(stderr, "Index out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+    memcpy(out_value, (char *)arr->data + index * arr->element_size, arr->element_size);
+}
+
+// Free the memory
+void array_free(Array *arr) {
+    free(arr->data);
+    arr->data = NULL;
+    arr->length = 0;
+    arr->element_size = 0;
+}
+
+int main() {
+    int size = 20;
+    Array arr = array_init(sizeof(int), size);
+
+    for (int i = 0; i < size; i++) {
+        int val = i * 10;
+        array_set(&arr, i, &val);
+    }
+
+    for (int i = 0; i < size; i++) {
+        int val;
+        array_get(&arr, i, &val);
+        printf("arr[%d] = %d\n", i, val);
+    }
+
+    array_free(&arr);
+    return 0;
+}
+
