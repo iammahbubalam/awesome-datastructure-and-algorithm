@@ -173,6 +173,7 @@ typedef struct {
     size_t length;
 } Array;
 
+int arr[6];
 // Function to initialize the array
 Array array_init(size_t element_size, size_t length) {
     Array arr;
@@ -186,6 +187,7 @@ Array array_init(size_t element_size, size_t length) {
     return arr;
 }
 
+arr[2] = 5;
 // Function to set value at index
 void array_set(Array *arr, size_t index, void *value) {
     if (index >= arr->length) {
@@ -195,6 +197,7 @@ void array_set(Array *arr, size_t index, void *value) {
     memcpy((char *)arr->data + index * arr->element_size, value, arr->element_size);
 }
 
+int a = arr[2];
 // Function to get value at index
 void array_get(Array *arr, size_t index, void *out_value) {
     if (index >= arr->length) {
